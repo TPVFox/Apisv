@@ -1,20 +1,14 @@
 <?php
 
 header('content-type: application/json; charset=utf-8');
-//en caso de json en vez de jsonp habría que habilitar CORS:
 header("access-control-allow-origin: *");
-
-//~ // Lo ideal seria poder utilizar las clase Joomla para realizar conexion pero no se como.
-//~ /**
- //~ * Define the application's minimum supported PHP version as a constant so it can be referenced within the application.
- //~ */
 define('JOOMLA_MINIMUM_PHP', '5.3.10');
 
 $resultado ='No';
 $respuesta = array();
 if (version_compare(PHP_VERSION, JOOMLA_MINIMUM_PHP, '<'))
 {
-	die('Your host needs to use PHP ' . JOOMLA_MINIMUM_PHP . ' or higher to run this version of Joomla!');
+    die('Your host needs to use PHP ' . JOOMLA_MINIMUM_PHP . ' or higher to run this version of Joomla!');
 }
 
 /**
@@ -22,10 +16,10 @@ if (version_compare(PHP_VERSION, JOOMLA_MINIMUM_PHP, '<'))
  * define() is used in the installation folder rather than "const" to not error for PHP 5.2 and lower
  */
 define('_JEXEC', 1);
-define('JPATH_BASE','./../../');// Ya sabemos ruta porque lo tenemos instalado en administrador/apisv 
+define('JPATH_BASE','./../../');// Ya sabemos ruta por lo que vamos raiz administrador 
 if (!defined('_JDEFINES'))
 {
-	require_once JPATH_BASE . '/includes/defines.php';
+    require_once JPATH_BASE . '/includes/defines.php';
 }
 
 
@@ -33,7 +27,7 @@ require_once JPATH_BASE .'/includes/framework.php';
 
 // require_once JPATH_BASE . '/includes/helper.php';
 // require_once JPATH_BASE . '/includes/toolbar.php';
- $Configuracion =  JFactory::getConfig();
+$Configuracion =  JFactory::getConfig();
 
 include_once ('./Clase_virtuemart_productos.php');
 
@@ -43,18 +37,9 @@ $plugin = JPluginHelper::getPlugin('system', 'apisv');
 // Si es correcto un objecto.
 // Si es incorrecto un  array.
 
-// if (gettype($plugin) === 'object'){
-	$pluginParams = new JRegistry();
-	$pluginParams->loadString($plugin->params);
-	$clave = $pluginParams->get('clave_apisv');
-// }
-//~ $resultado = __DIR__;
-// Cargamos conexione
-//~ include_once("./conexionBaseDatos.php");
-// Cargamos nuestras funciones.
-//~ include_once ("./funciones.php");
-//~ include_once ("./Arrays_inicio.php");
-
+$pluginParams = new JRegistry();
+$pluginParams->loadString($plugin->params);
+$clave = $pluginParams->get('clave_apisv');
 $ClaseProductosVirtual=new APISV_virtuemart_productos();
 //~ echo '<pre>';
 //~ print_r($ClaseProductosVirtual->ObtenerIvasweb());
@@ -69,13 +54,13 @@ $resource = $_SERVER['REQUEST_URI'];
 
 // Dependiendo del método de la petición ejecutaremos la acción correspondiente.
 if (gettype($plugin) === 'object') {
-	switch ($method) {
-		case 'GET':
-			// código para método GET
-			break;
-		case 'POST':
-			$arguments = $_POST;
-			if ($_POST['key'] === $clave){
+    switch ($method) {
+        case 'GET':
+            // código para método GET
+            break;
+        case 'POST':
+            $arguments = $_POST;
+            if ($_POST['key'] === $clave){
                 if ($_POST['action'] === 'ObtenerProducto'){
                    
                     $resultado=array();
@@ -168,10 +153,10 @@ if (gettype($plugin) === 'object') {
                    $mailer->addRecipient($datos->email);
 
                    // Send the Mail
-                   $rs	= $mailer->Send();
+                   $rs  = $mailer->Send();
 
                    if ( JError::isError($rs) ) {
-                       $msg	= $rs->getError();
+                       $msg = $rs->getError();
                        
                    } else {
                        $msg = "Mensaje enviado correctamente.";
@@ -207,30 +192,27 @@ if (gettype($plugin) === 'object') {
                     
                 }
                 
-			} else {
-				// Quiere decir que la clave es incorrecta.
-				$respuesta['error'] = 'La clave es incorrecta revis el plugin en Joomla';
+            } else {
+                // Quiere decir que la clave es incorrecta.
+                $respuesta['error'] = 'La clave es incorrecta revisa el plugin en Joomla';
 
-			}
-			// código para método POST
-			break;
-		case 'PUT':
-			parse_str(file_get_contents('php://input'), $arguments);
-			// código para método PUT
-			break;
+            }
+            // código para método POST
+            break;
+        case 'PUT':
+            parse_str(file_get_contents('php://input'), $arguments);
+            // código para método PUT
+            break;
 
-	}
+    }
 $respuesta['post'] = $_POST;
 $respuesta['QuienDevuelve']= $resource;
 $respuesta['Datos'] = $resultado;
 $respuesta['metodo_utilizado']=$method;
 } else {
-	// Quiere decir que no hay clave... 
-	$respuesta['error'] = ' No existe clave en servidor';
+    // Quiere decir que no hay plugin... 
+    $respuesta['error'] = ' No existe plugin en servidor';
 }
-//~ echo '<pre>';
-//~ print_r($respuesta);
-//~ echo '</pre>';
 echo json_encode($respuesta,true); // $response será un array con los datos de nuestra respuesta.
 ?>
 
