@@ -8,17 +8,29 @@ A parte la Apisv necesitas intalar un plugin en joomla que contiene el token de 
 ##ACCIONES QUE PODEMOS REALIZAR CON LA CONEXION CON LA API
 #### Valores Action
 ObtenerProducto : Enviado por curl el id_virtuemart del producto, obtenemos los datos de ese producto y ademas un array con lo ivas de la web.
+
 ModificarProducto: Enviado los datos de un producto con su id_virtuemar puede modificar los datos del producto en la web.
+
 AddProducto: Añadir un producto nuevo.
+
 todasFamilias: Obtener todas las familias.
+
 modificarFamilia:
+
 datosFamilia:
+
 AddFamilia:
+
 ObtenerNotificacionesProducto:
+
 modificarNotificacion:
+
 contarProductos:
+
 productosInicioFinal:
+
 descontarStock:
+
 cambiarStockYPrecios:
 enviarCorreo:
 buscarImagenesParaRelacionar:
